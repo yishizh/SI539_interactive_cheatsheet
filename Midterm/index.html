@@ -1,0 +1,834 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SI 539 Midterm Study Guide</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-title">
+    <h1>SI 539 Study Guide</h1>
+    <p>Midterm · HTML &amp; CSS · No Flex on exam</p>
+  </div>
+  <div class="search-wrap">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+    <input type="text" id="search" placeholder="Search any syntax, e.g. grid-column, :hover, &lt;nav&gt;, alt..." autocomplete="off" spellcheck="false" />
+  </div>
+  <div class="match-pill" id="matchPill"></div>
+</div>
+
+<div class="tabs-bar" id="tabsBar"></div>
+<div class="content" id="content"></div>
+
+<div class="page-footer">
+  SI 539 Web Design · University of Michigan · Hover over any card to see a live preview
+</div>
+
+<div class="preview-popup" id="previewPopup">
+  <div class="preview-header" id="previewTitle">▶ preview</div>
+  <iframe class="preview-frame" id="previewFrame" sandbox="allow-scripts"></iframe>
+</div>
+
+<script>
+// ── BASE PREVIEW WRAPPER ─────────────────────────────────────────────────────
+const W = c => `<!DOCTYPE html><html><head><meta charset="UTF-8"><base href="${location.href.replace(/\/[^\/]*$/, '/')}"><style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Arial,sans-serif;font-size:14px;line-height:1.6;padding:14px;background:#fff;color:#222}
+h1{font-size:26px;font-weight:bold;margin-bottom:6px;color:#00274C}
+h2{font-size:20px;font-weight:bold;margin-bottom:5px;color:#00274C}
+h3{font-size:16px;font-weight:bold;margin-bottom:4px;color:#00274C}
+p{margin-bottom:7px}
+a{color:#0066cc;text-decoration:underline}
+ul,ol{padding-left:20px;margin-bottom:8px}
+li{margin-bottom:3px}
+strong{font-weight:bold}
+img{max-width:100%;display:block;margin-bottom:6px}
+nav ul{list-style:none;padding:0;display:flex;gap:10px}
+nav a{text-decoration:none;color:#00274C;font-weight:600;padding:4px 8px}
+nav{background:#f0f0f0;padding:8px;border-radius:3px}
+header{background:#00274C;color:#FFCB05;padding:10px 14px;border-radius:3px;margin-bottom:8px}
+footer{background:#222;color:#fff;padding:8px 12px;border-radius:3px;margin-top:8px;font-size:12px}
+main{padding:6px}
+section{border:1px dashed #bbb;padding:8px;margin-bottom:5px;border-radius:3px}
+.note{background:#fff8e1;border-left:3px solid #FFCB05;padding:8px;border-radius:0 4px 4px 0;font-size:13px}
+.good{background:#e8f5e9;border-left:3px solid #4caf50;padding:8px;border-radius:0 4px 4px 0;font-size:13px}
+.bad{background:#ffebee;border-left:3px solid #f44336;padding:8px;border-radius:0 4px 4px 0;font-size:13px}
+</style></head><body>${c}</body></html>`;
+
+// ── DATA ─────────────────────────────────────────────────────────────────────
+const TABS = [
+  // ── 1. HTML STRUCTURE ────────────────────────────────────────────────────
+  { id:'html-struct', label:'HTML Structure', groups:[
+    { title:'Document skeleton', items:[
+      { label:'<!DOCTYPE html>',
+        def:'Declares the document as HTML5. Must be the very first line — no spaces or characters before it.',
+        code:'<!DOCTYPE html>\n<html lang="en">\n  <head>...</head>\n  <body>...</body>\n</html>',
+        preview:W('<div class="good">✓ Browser renders in HTML5 standards mode</div><p style="margin-top:8px;font-size:13px;color:#555">Without DOCTYPE, browsers enter "quirks mode" — CSS behaves unpredictably.</p>')
+      },
+      { label:'<html lang="en">',
+        def:'Root element wrapping the entire page. The lang attribute tells screen readers which language pronunciation to use.',
+        code:'<html lang="en">\n  <!-- entire page goes here -->\n</html>',
+        preview:W('<p><strong>lang="en"</strong> → English pronunciation</p><ul style="margin-top:8px"><li>lang="zh" → Chinese</li><li>lang="es" → Spanish</li><li>lang="fr" → French</li></ul><p style="margin-top:8px;color:#555;font-size:12px">Required for correct screen reader behavior.</p>')
+      },
+      { label:'<head>',
+        def:'Container for page metadata — not visible on screen. Links CSS, sets title, configures viewport.',
+        code:'<head>\n  <meta charset="UTF-8">\n  <meta name="viewport"\n    content="width=device-width,\n    initial-scale=1.0">\n  <link rel="stylesheet" href="css/style.css">\n  <title>About Me</title>\n</head>',
+        preview:W('<p><strong>Inside &lt;head&gt; (invisible to users):</strong></p><ul style="margin-top:8px"><li>charset → text encoding</li><li>viewport → mobile scaling</li><li>link → CSS file</li><li>title → browser tab text</li></ul>')
+      },
+      { label:'<body>',
+        def:'All visible page content belongs here — text, images, links, header, nav, main, footer.',
+        code:'<body>\n  <header>...</header>\n  <main>...</main>\n  <footer>...</footer>\n</body>',
+        preview:W('<header>Header (inside body)</header><main><p>Main content (inside body)</p></main><footer>Footer (inside body)</footer>')
+      },
+      { label:'<meta charset="UTF-8">',
+        def:'Sets character encoding. UTF-8 supports virtually all characters — accents, non-Latin scripts, special symbols.',
+        code:'<meta charset="UTF-8">',
+        preview:W('<p>With UTF-8 encoding you can use:</p><ul style="margin-top:8px"><li>Café, résumé (accented)</li><li>© ← → ✓ ✗</li><li>中文字符</li><li>&amp;copy; = © &amp;amp; = &amp;</li></ul>')
+      },
+      { label:'<meta name="viewport">',
+        def:'Controls how mobile browsers scale the page. Without this, phones zoom out to show a desktop-sized layout.',
+        code:'<meta name="viewport"\n  content="width=device-width,\n  initial-scale=1.0">',
+        preview:W('<div class="good"><strong>width=device-width</strong><br>Page width = screen width (not 980px default)</div><div class="good" style="margin-top:6px"><strong>initial-scale=1.0</strong><br>No zoom — 1:1 pixel ratio</div><p style="margin-top:8px;font-size:12px;color:#777">Required for all responsive/mobile-first designs.</p>')
+      },
+      { label:'<link rel="stylesheet">',
+        def:'Links an external CSS file. Goes inside <head>. Uses rel="stylesheet" to declare file type.',
+        code:'<link rel="stylesheet"\n  href="css/style.css">\n\n<link rel="icon"\n  href="images/favicon.ico">',
+        preview:W('<p>Without linked CSS:</p><p>Plain unstyled text.</p><p style="margin-top:8px;color:#0066cc;font-size:18px;font-weight:bold">With linked CSS this could be styled any way!</p><p style="font-size:12px;color:#555;margin-top:8px">One CSS file can style every page on the site.</p>')
+      },
+      { label:'<style>',
+        def:'Embeds CSS directly inside the HTML file. Goes inside <head>. Styles only apply to that page. Use <link> for styles shared across multiple pages.',
+        code:'<head>\n  <style>\n    body {\n      background-color: #f4f6f9;\n      font-family: Arial, sans-serif;\n    }\n    h1 {\n      color: #00274C;\n    }\n  </style>\n</head>',
+        preview:W('<style>#style-demo h1{color:#00274C}#style-demo p{background:#f4f6f9;padding:8px;border-radius:4px;font-family:Arial,sans-serif}</style><div id="style-demo"><h1>Styled with &lt;style&gt;</h1><p>This paragraph is styled via an embedded &lt;style&gt; block in the &lt;head&gt;.</p></div><div class="note" style="margin-top:10px"><strong>&lt;link&gt;</strong> = external CSS (shared across pages)<br><strong>&lt;style&gt;</strong> = inline CSS (this page only)</div>')
+      },
+      { label:'<title>',
+        def:'Sets the browser tab text and bookmark name. Goes inside <head>. Not visible on the page itself.',
+        code:'<title>About Me - Colleen van Lent</title>',
+        preview:W('<div class="note">Browser tab shows: <strong>About Me - Colleen van Lent</strong></div><p style="margin-top:8px;font-size:13px;color:#555">Used by: browser tabs, bookmarks, search engine results, screen readers.</p>')
+      }
+    ]},
+    { title:'Semantic landmark tags', items:[
+      { label:'<header>',
+        def:'Page or section header landmark. Usually contains <nav> and <h1>. Screen readers can jump here.',
+        code:'<header>\n  <nav>...</nav>\n  <h1>Colleen van Lent</h1>\n</header>',
+        preview:W('<header><h1 style="color:#FFCB05">Colleen van Lent</h1><nav><ul><li><a href="#" style="color:#FFCB05;text-decoration:none">Home</a></li><li><a href="#" style="color:rgba(255,255,255,0.7);text-decoration:none">Family</a></li><li><a href="#" style="color:rgba(255,255,255,0.7);text-decoration:none">Random</a></li></ul></nav></header>')
+      },
+      { label:'<nav>',
+        def:'Marks navigation links. Creates a "navigation" landmark — screen reader users can skip directly to it.',
+        code:'<nav>\n  <ul>\n    <li class="active">\n      <a href="index.html">About Me</a>\n    </li>\n    <li><a href="family.html">Family</a></li>\n  </ul>\n</nav>',
+        preview:W('<nav><ul style="list-style:none;padding:0;display:flex;gap:8px;background:#00274C;padding:10px;border-radius:4px"><li style="background:#FFCB05;padding:4px 10px;border-radius:3px"><a href="#" style="color:#00274C;font-weight:bold;text-decoration:none">About Me</a></li><li><a href="#" style="color:rgba(255,255,255,0.8);text-decoration:none;padding:4px 10px">Family</a></li><li><a href="#" style="color:rgba(255,255,255,0.8);text-decoration:none;padding:4px 10px">Random</a></li></ul></nav>')
+      },
+      { label:'<main>',
+        def:'Primary page content. Only ONE per page. It\'s the target of skip-link href="#main". Screen reader landmark.',
+        code:'<!-- Skip link (first in body) -->\n<a href="#main">Skip to Main Content</a>\n\n<!-- Main with matching id -->\n<main id="main">\n  <!-- all page content -->\n</main>',
+        preview:W('<a href="#main-demo" style="background:#FFCB05;color:#00274C;padding:5px 10px;text-decoration:none;font-weight:bold;border-radius:3px">Skip to Main Content</a><main id="main-demo" style="border:2px solid #00274C;padding:10px;margin-top:10px;border-radius:4px"><p>✓ This is the &lt;main&gt; landmark — skip link target</p></main>')
+      },
+      { label:'<footer>',
+        def:'Page footer landmark. Contains copyright info, author, extra links. Semantic — aids readability and screen readers.',
+        code:'<footer>\n  <p>Colleen van Lent &copy; 2023</p>\n</footer>',
+        preview:W('<footer><p>Colleen van Lent © 2023</p></footer>')
+      },
+      { label:'<section>',
+        def:'Thematically groups related content. Usually has its own heading. More semantic than <div>.',
+        code:'<section>\n  <h2>Resume Resources</h2>\n  <p>Start with a UMSI-approved template...</p>\n</section>\n<section>\n  <h2>Resume FAQ</h2>\n  ...\n</section>',
+        preview:W('<section><h2>Resume Resources</h2><p>Start with a UMSI-approved template.</p></section><section style="margin-top:6px"><h2>Resume FAQ</h2><p>How long should my resume be? One page for most students.</p></section>')
+      },
+      { label:'<div>',
+        def:'Generic block-level container — no semantic meaning. Use when no semantic tag fits. Pair with class for styling.',
+        code:'<div class="red">\n  <h2>Red Rule</h2>\n  <p>If you can\'t play, draw one card.</p>\n</div>\n<div class="blue">\n  <h2>Blue Rule</h2>\n  <p>You can\'t stack draw cards.</p>\n</div>',
+        preview:W('<div style="background:#FF0000;color:white;padding:12px;margin-bottom:6px;border-radius:4px"><h2 style="color:#c4c4c4">Red Rule</h2><p style="color:#c4c4c4">Draw one card if you can\'t play.</p></div><div style="background:#0000FF;color:white;padding:12px;border-radius:4px"><h2 style="color:#c4c4c4">Blue Rule</h2><p style="color:#c4c4c4">You can\'t stack draw cards.</p></div>')
+      }
+    ]},
+    { title:'Content tags', items:[
+      { label:'<h1> – <h3>',
+        def:'Heading hierarchy. h1 = page title (one per page). h2 = section. h3 = subsection. Never skip levels for visual size.',
+        code:'<h1>Colleen van Lent</h1>\n<h2>My Work</h2>\n<h3>Teaching</h3>',
+        preview:W('<h1>h1 — Page Title (one per page)</h1><h2>h2 — Section Heading</h2><h3>h3 — Subsection</h3><p style="color:#555;font-size:12px;margin-top:8px">Never skip levels (h1 → h3) just for visual size. Use CSS for sizing.</p>')
+      },
+      { label:'<p>',
+        def:'Paragraph of text. Block-level — adds spacing above and below automatically.',
+        code:'<p>I am a Lecturer IV in the School\n  of Information at the University\n  of Michigan.</p>\n<p>Second paragraph here.</p>',
+        preview:W('<p>I am a Lecturer IV in the School of Information at the University of Michigan. I focus on web design courses.</p><p>I received my BS from Kent State University Honors College in Computer Science.</p>')
+      },
+      { label:'<a>',
+        def:'Anchor tag for hyperlinks. Needs href (destination) and descriptive visible text. Avoid "click here."',
+        code:'<!-- Relative link -->\n<a href="family.html">My Family</a>\n\n<!-- External link -->\n<a href="https://umich.edu"\n   target="_blank">Visit UMICH</a>\n\n<!-- Anchor/skip link -->\n<a href="#main">Skip to Main</a>',
+        preview:W('<p><a href="#">My Family (relative)</a></p><p style="margin-top:8px"><a href="https://umich.edu" target="_blank">Visit UMICH ↗ (external, new tab)</a></p><p style="margin-top:8px"><a href="#main">Skip to Main Content (anchor)</a></p>')
+      },
+      { label:'<img>',
+        def:'Embeds an image. Void element — no closing tag. The alt attribute is required for accessibility.',
+        code:'<img src="images/rushmore.jpg"\n     width="250"\n     alt="The Rushmore Mountain with 4 president face carvesd in the rock">\n\n<!-- Decorative image with empty alt -->\n<img src="images/divider.png" alt="">',
+        preview:W('<img src="images/rushmore.jpg" alt="The Rushmore Mountain with 4 president face carvesd in the rock" style="border:3px dashed #ccc;border-radius:4px"><p style="font-size:12px;color:#555;margin-top:5px">alt describes the image for screen readers and shows if image fails.</p>')
+      },
+      { label:'<ul> and <ol>',
+        def:'ul = unordered list (bullets). ol = ordered list (numbers). Both require <li> children.',
+        code:'<ul>\n  <li>Personal Checking</li>\n  <li>Student Accounts</li>\n</ul>\n\n<ol>\n  <li>Download template</li>\n  <li>Write bullets</li>\n  <li>Tailor each time</li>\n</ol>',
+        preview:W('<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px"><div><strong>ul (bullets):</strong><ul><li>Personal Checking</li><li>Student Accounts</li><li>Business Solutions</li></ul></div><div><strong>ol (numbers):</strong><ol><li>Download template</li><li>Write bullets</li><li>Tailor each time</li></ol></div></div>')
+      },
+      { label:'<strong>',
+        def:'Bold text AND signals importance semantically. Screen readers may emphasize it. Different from CSS font-weight.',
+        code:'<li>\n  <strong>Everything in One Place:</strong>\n  Stop searching endlessly.\n</li>',
+        preview:W('<ul><li><strong>Everything in One Place:</strong> Stop searching endlessly — find resources fast.</li><li><strong>Student-Focused:</strong> Browse by topic or question.</li><li>Regular text (no strong) for comparison.</li></ul>')
+      },
+      { label:'<br>',
+        def:'Forces a line break. Void element — no closing tag. Use sparingly; CSS margins/padding preferred for spacing.',
+        code:'<p>\n  University of Michigan<br>\n  School of Information<br>\n  &copy; 2025\n</p>',
+        preview:W('<p>University of Michigan<br>School of Information<br>© 2025</p><p style="margin-top:10px;color:#555;font-size:12px">vs. without br:<br>"University of Michigan School of Information © 2025"</p>')
+      },
+      { label:'<!-- comment -->',
+        def:'HTML comment — ignored by the browser and not visible on the page. Used to leave notes in code or temporarily disable markup.',
+        code:'<!-- this is a comment -->\n\n<!-- TODO: add image here -->\n\n<!-- <p>This paragraph is commented out</p> -->'
+      }
+    ]}
+  ]},
+
+  // ── 2. ATTRIBUTES ─────────────────────────────────────────────────────────
+  { id:'attributes', label:'Attributes', groups:[
+    { title:'Link (href) attributes', items:[
+      { label:'href="page.html"',
+        def:'Relative link — navigates within the same site. Path relative to the current file.',
+        code:'<a href="index.html">About Me</a>\n<a href="family.html">My Family</a>\n<a href="random.html">Random</a>',
+        preview:W('<nav><ul style="list-style:none;padding:0"><li><a href="#">index.html → About Me</a></li><li><a href="#">family.html → My Family</a></li><li><a href="#">random.html → Random Stuff</a></li></ul></nav>')
+      },
+      { label:'href="https://..."',
+        def:'Absolute link — full URL including protocol (https://). Required for external sites.',
+        code:'<a href="https://www.si.umich.edu">UMSI</a>\n<a href="https://www.kent.edu">Kent State</a>',
+        preview:W('<p><a href="https://www.si.umich.edu">https://www.si.umich.edu</a></p><p style="margin-top:8px"><a href="https://www.kent.edu">https://www.kent.edu</a></p><div class="note" style="margin-top:10px">Always include https:// for external links.</div>')
+      },
+      { label:'href="#id"',
+        def:'Anchor link — jumps to element with matching id on the same page. Core of skip links and in-page nav.',
+        code:'<!-- The link -->\n<a href="#main">Skip to Main</a>\n<a href="#accounts">Accounts</a>\n\n<!-- The targets -->\n<main id="main">...\n<div id="accounts">...',
+        preview:W('<a href="#s2">Jump to Section 2 ↓</a><div style="height:50px;color:#999;font-size:12px;padding-top:6px">(content in between)</div><div id="s2" style="border:2px solid #00274C;padding:10px;border-radius:4px">✓ id="s2" — anchor target</div>')
+      },
+      { label:'target="_blank"',
+        def:'Opens link in a new browser tab. Best practice: only use for external links.',
+        code:'<a href="https://docs.google.com/..."\n   target="_blank">\n  UMSI Resume Guide\n</a>',
+        preview:W('<a href="#" target="_blank">UMSI Resume Guide ↗ (new tab)</a><div class="note" style="margin-top:10px">All external resource links on your UMSI site use target="_blank" so users don\'t navigate away.</div>')
+      }
+    ]},
+    { title:'Image attributes', items:[
+      { label:'alt="description"',
+        def:'Required on every <img>. Describes image for screen readers. Shows when image fails to load. Empty alt="" is OK for purely decorative images.',
+        code:'<!-- Informative -->\n<img src="rushmore.jpg"\n  alt="Four presidents carved\n  into Mount Rushmore">\n\n<!-- Decorative (skip reading) -->\n<img src="divider.png" alt="">',
+        preview:W('<img src="images/broken.jpg" alt="Four presidents carved into Mount Rushmore" style="border:2px dashed #ccc;padding:4px;border-radius:4px"><p style="font-size:12px;color:#555;margin-top:4px">↑ Image fails → alt text shown in its place</p><div class="note" style="margin-top:8px"><strong>Good:</strong> describes who/what/where<br><strong>Bad:</strong> "image.jpg" or "photo here"</div>')
+      },
+      { label:'src="images/..."',
+        def:'Path to the image file. Can be relative (same site) or absolute (external URL). Path is relative to the HTML file.',
+        code:'<!-- Same folder -->\n<img src="images/photo.jpg">\n\n<!-- Go up one level -->\n<img src="../images/photo.jpg">\n\n<!-- Absolute URL -->\n<img src="https://example.com/img.png">',
+        preview:W('<div class="note"><strong>Path rules:</strong><br>./  = same folder<br>../  = one folder up<br>images/  = into images subfolder<br><br>CSS paths are relative to the .css file, not the HTML!</div>')
+      }
+    ]},
+    { title:'Global attributes', items:[
+      { label:'class="name"',
+        def:'Assigns CSS class(es) to element. Classes are reusable — multiple elements can share the same class. Multiple classes separated by spaces.',
+        code:'<!-- Single class -->\n<li class="active"><a href="#">Home</a></li>\n\n<!-- Multiple classes -->\n<div class="text-block accounts">\n\n<!-- Used in CSS -->\n.active { background: var(--um-maize); }',
+        preview:W('<style>.active-demo a{background:#FFCB05;color:#00274C;padding:4px 10px;border-radius:3px;font-weight:bold;text-decoration:none}</style><ul style="list-style:none;padding:0;display:flex;gap:8px;background:#00274C;padding:10px;border-radius:4px"><li class="active-demo"><a href="#">Home</a></li><li><a href="#" style="color:white;text-decoration:none;padding:4px 10px">Family</a></li><li><a href="#" style="color:white;text-decoration:none;padding:4px 10px">Random</a></li></ul><p style="font-size:12px;color:#555;margin-top:8px">class="active" highlights the current page in nav.</p>')
+      },
+      { label:'id="name"',
+        def:'Unique identifier — only ONE element per page can have a given id. Used for skip links, anchor nav, and JavaScript.',
+        code:'<!-- Target element -->\n<main id="main">\n<div id="accounts">\n<section id="loans">\n\n<!-- Linking to it -->\n<a href="#accounts">Accounts</a>',
+        preview:W('<div class="note"><strong>class</strong> — reusable, many elements can share it<br><strong>id</strong> — unique, only ONE per page<br><br>Both used for CSS targeting, but id has higher specificity (100pts vs 10pts).</div><a href="#demo" style="margin-top:8px;display:block">Jump to #demo ↓</a><div id="demo" style="margin-top:40px;border:2px solid #00274C;padding:8px;border-radius:4px">id="demo" target</div>')
+      }
+    ]},
+    { title:'HTML entities', items:[
+      { label:'&copy; &amp; &lt; &gt;',
+        def:'Special characters that need encoding in HTML. &copy; = ©, &amp; = &, &lt; = <, &gt; = >, &nbsp; = non-breaking space.',
+        code:'<footer>\n  <p>Colleen van Lent &copy; 2023</p>\n</footer>\n\n<!-- Show literal angle brackets -->\n<p>Use &lt;p&gt; for paragraphs</p>',
+        preview:W('<footer><p>Colleen van Lent © 2023</p></footer><p style="margin-top:10px">Use &lt;p&gt; for paragraphs</p><div class="note" style="margin-top:8px">Without encoding, &lt;p&gt; would be parsed as an actual HTML tag!</div>')
+      }
+    ]}
+  ]},
+
+  // ── 3. CSS SELECTORS ──────────────────────────────────────────────────────
+  { id:'css-sel', label:'Selectors', groups:[
+    { title:'Basic selectors', items:[
+      { label:'element { }',
+        def:'Type selector — targets ALL instances of that HTML tag. Lowest specificity (1 point).',
+        code:'h1 {\n  font-size: 42px;\n  text-align: center;\n}\n\np {\n  font-size: 24px;\n  padding: 10px 0 0 10px;\n}',
+        preview:W('<h1>This h1 is 42px and centered</h1><p>This p has 24px font and padding.</p><p>This one too — element selectors target ALL instances.</p>')
+      },
+      { label:'.class { }',
+        def:'Class selector — targets all elements with that class name. Reusable. 10 specificity points.',
+        code:'.active {\n  background-color: var(--um-maize);\n  color: var(--um-blue);\n}\n\n.red {\n  background-color: #FF0000;\n  text-align: right;\n  margin-left: 50px;\n}',
+        preview:W('<style>.act{background:#FFCB05;color:#00274C;padding:4px 10px;border-radius:3px;font-weight:bold}.red-d{background:#FF0000;color:white;padding:12px;text-align:right;margin-left:40px;border-radius:3px;margin-top:8px}</style><span class="act">.active class</span><div class="red-d"><p style="color:white">.red class div</p></div>')
+      },
+      { label:'#id { }',
+        def:'ID selector — targets the one element with that exact id. High specificity (100 points). Use sparingly.',
+        code:'#main {\n  max-width: 1200px;\n  margin: 0 auto;\n  padding: 20px;\n}',
+        preview:W('<style>#dmain{max-width:400px;margin:0 auto;padding:14px;border:2px solid #00274C;border-radius:4px;background:#f9f9f9}</style><div id="dmain"><p>id="main" — max-width 400px, centered with margin: 0 auto.</p></div>')
+      },
+      { label:'* { }',
+        def:'Universal selector — matches every element on the page. Used for box-sizing resets and global focus styles.',
+        code:'* {\n  box-sizing: border-box;\n}\n\n*:focus {\n  border: 5px dashed green;\n}',
+        preview:W('<style>*:focus{border:4px dashed green;outline:none}</style><p>Tab to interact with these elements to see *:focus:</p><input type="text" placeholder="Click/tab to focus" style="padding:6px;margin-top:8px;width:100%"><br><a href="#" style="display:inline-block;margin-top:8px">Or tab to this link</a>')
+      }
+    ]},
+    { title:'Combinators', items:[
+      { label:'ancestor descendant { }',
+        def:'Descendant selector — targets elements nested ANYWHERE inside the ancestor, not just direct children.',
+        code:'nav a {\n  color: white;\n  text-decoration: none;\n}\n\n.blue h2, .blue p {\n  color: #c4c4c4;\n}\n\nfooter p {\n  font-size: 20px;\n  text-align: right;\n}',
+        preview:W('<style>nav a.ds{color:#FFCB05;text-decoration:none;font-weight:bold}.blue-ds h2,.blue-ds p{color:#c4c4c4}</style><nav style="background:#00274C;padding:8px;border-radius:3px"><ul style="list-style:none;padding:0;display:flex;gap:12px"><li><a href="#" class="ds">Home</a></li><li><a href="#" class="ds">About</a></li></ul></nav><div class="blue-ds" style="background:#0000FF;padding:12px;border-radius:3px;margin-top:6px"><h2>Blue heading</h2><p>Blue paragraph</p></div>')
+      },
+      { label:'parent > child { }',
+        def:'Direct child combinator — only targets immediate children, not deeper descendants.',
+        code:'.container > div:first-child {\n  background-image: url(header.jpg);\n  grid-column: 1 / -1;\n}',
+        preview:W('<div class="note"><strong>.container &gt; div:first-child</strong><br><br>The &gt; means ONLY the direct first-child div gets the header image. Any deeper nested divs are unaffected.<br><br>Contrast with: .container div (all descendant divs)</div>')
+      }
+    ]},
+    { title:'Grouped selectors', items:[
+      { label:'selector, selector { }',
+        def:'Comma groups — apply the same rules to multiple selectors. Keeps CSS DRY (Don\'t Repeat Yourself).',
+        code:'.accounts,\n.security,\n.contact {\n  grid-column: 4 / 7;\n}\n\nnav a:hover,\nnav a:focus {\n  border: 2px dotted purple;\n}',
+        preview:W('<style>.g-a,.g-b,.g-c{background:#e8f0fb;border-left:3px solid #00274C;padding:8px;border-radius:0 4px 4px 0;margin-bottom:4px;font-size:13px}</style><div class="g-a">.accounts — grid-column: 4/7</div><div class="g-b">.security — grid-column: 4/7</div><div class="g-c">.contact — grid-column: 4/7</div><p style="font-size:12px;color:#555;margin-top:6px">All three share the same rule via comma grouping.</p>')
+      }
+    ]},
+    { title:'Pseudo-class selectors', items:[
+      { label:':hover',
+        def:'Applies styles when the user mouses over the element. Used for interactive feedback on links and nav.',
+        code:'nav a:hover {\n  background-color: rgba(255,255,255,0.2);\n  transform: translateY(-2px);\n}\n\na:hover {\n  color: var(--um-arboretum-blue);\n}',
+        preview:W('<style>a.hv:hover{color:#00B2A9;background:#f0f0f0;padding:2px 6px;border-radius:3px}a.hv2:hover{background:rgba(255,255,255,0.25);transform:translateY(-2px);display:inline-block;transition:all 0.2s}</style><p>Hover this: <a class="hv" href="#">Visit UMSI</a></p><nav style="background:#00274C;padding:10px;margin-top:8px;border-radius:3px"><a class="hv2" href="#" style="color:white;text-decoration:none;padding:6px 10px;display:inline-block">Hover nav link</a></nav>')
+      },
+      { label:':focus',
+        def:'Applies when element is keyboard-focused (Tab key). Essential for keyboard accessibility. Always provide visible focus style.',
+        code:'a:focus {\n  outline: 3px solid var(--um-maize);\n  outline-offset: 2px;\n}\n\nnav a:focus {\n  border: 2px dotted purple;\n}',
+        preview:W('<style>a.fc:focus{outline:3px solid #FFCB05;outline-offset:2px;border-radius:2px}input.fc:focus{outline:3px solid #00274C;border-radius:3px}</style><p style="margin-bottom:8px">Tab through these elements:</p><a class="fc" href="#">Link 1</a> &nbsp; <a class="fc" href="#">Link 2</a><br><input class="fc" type="text" placeholder="Input field" style="margin-top:8px;padding:6px;width:100%;border:1px solid #ccc;border-radius:3px">')
+      },
+      { label:':focus-visible',
+        def:'Modern approach — shows focus ring for keyboard nav but hides it for mouse clicks. More refined than :focus alone.',
+        code:'*:focus-visible {\n  outline: 3px solid var(--um-maize);\n  outline-offset: 2px;\n}',
+        preview:W('<style>*:focus-visible{outline:3px solid #FFCB05;outline-offset:2px;border-radius:2px}</style><p style="font-size:13px">:focus-visible behavior:<br>✓ Shows outline when <strong>tabbing</strong> (keyboard)<br>✗ Hides outline when <strong>clicking</strong> with mouse</p><a href="#">Tab to me to see the maize outline</a>')
+      },
+      { label:':first-child',
+        def:'Targets an element only when it is the first child of its parent element.',
+        code:'.container div:first-child {\n  background-image: url(header.jpg);\n  grid-column: 1 / -1;\n}\n\nmain ol li:last-child {\n  margin-bottom: 0;\n}',
+        preview:W('<style>.fc-p div:first-child{background:#FFCB05;color:#00274C;font-weight:bold;border-left:4px solid #00274C}.fc-p div{padding:8px;border:1px solid #e0e0e0;margin-bottom:4px;border-radius:3px}</style><div class="fc-p"><div>First child ← :first-child rule applies here</div><div>Second child — no special rule</div><div>Third child — no special rule</div></div>')
+      }
+    ]},
+    { title:'Specificity', items:[
+      { label:'Specificity (0,0,0,0)',
+        def:'When conflicting rules apply, the more specific selector wins: inline > #id > .class/:pseudo > element > *',
+        code:'/* 0,0,0,1 — element *\np { color: gray; }\n\n/* 0,0,1,0 — class */\n.active { color: blue; }\n\n/* 0,1,0,0 — id */\n#main { color: green; }\n\n/* 1,0,0,0 — inline */\n<p style="color: red">',
+        preview:W('<style>p.sp-p{color:gray}p.sp-p.active{color:blue}#sp-id p.sp-p.active{color:green}</style><div id="sp-id"><p class="sp-p active">Green wins — #id (0,1,0,0) beats .class (0,0,1,0) beats element (0,0,0,1)</p></div><p style="font-size:12px;color:#555;margin-top:8px">Shorthand: 0,0,0 for *; element=1; class=10; id=100; inline=1000</p>')
+      }
+    ]}
+  ]},
+
+  // ── 4. BOX MODEL ──────────────────────────────────────────────────────────
+  { id:'css-box', label:'Box Model', groups:[
+    { title:'Margin (outer spacing)', items:[
+      { label:'margin shorthand',
+        def:'4 values = Top Right Bottom Left (clockwise). 2 values = Top/Bottom Left/Right. 1 value = all sides.',
+        code:'/* All sides */\nbody { margin: 20px; }\n\n/* T R B L clockwise */\nbody { margin: 20px 20px 0px 20px; }\n\n/* Center horizontally */\nmain { margin: 0 auto; }',
+        preview:W('<div style="background:#FFCB05;margin:20px;padding:10px;border:2px solid #00274C;border-radius:3px;font-size:13px">margin: 20px (all sides)</div><div style="background:#00274C;color:white;width:60%;margin:0 auto;padding:8px;text-align:center;border-radius:3px;font-size:13px">margin: 0 auto (centered)</div>')
+      },
+      { label:'margin-left / margin-right',
+        def:'Individual side margins. Used in UNO card HW to offset .red and .blue divs from different sides.',
+        code:'.red {\n  margin-left: 50px;  /* indent from left */\n}\n\n.blue {\n  margin-right: 50px; /* indent from right */\n}',
+        preview:W('<div style="background:#FF0000;color:white;margin-left:50px;padding:10px;margin-bottom:6px;border-radius:3px">.red — margin-left: 50px</div><div style="background:#0000FF;color:white;margin-right:50px;padding:10px;border-radius:3px">.blue — margin-right: 50px</div>')
+      }
+    ]},
+    { title:'Padding (inner spacing)', items:[
+      { label:'padding shorthand',
+        def:'Space between content and border. Same 1/2/4 value syntax as margin. Does NOT collapse like margins.',
+        code:'/* T R B L */\np { padding: 10px 0px 0px 10px; }\n\n/* All sides */\ndiv { padding: 20px; }\n\n.text-block { padding: 30px; }\n\nfooter p {\n  padding: 15px 15px 15px 0px;\n}',
+        preview:W('<div style="background:#e8f0fb;border:2px solid #00274C;padding:20px;margin-bottom:6px;border-radius:3px">padding: 20px all sides</div><div style="background:#e8f0fb;border:2px solid #00274C;padding:10px 0 0 10px;border-radius:3px">padding: 10px 0 0 10px (top and left only)</div>')
+      }
+    ]},
+    { title:'Border', items:[
+      { label:'border shorthand',
+        def:'Sets width, style, and color in one declaration. Styles: solid, dashed, dotted, double, none.',
+        code:'/* width style color */\ndiv { border: 3px solid #FFFFFF; }\nimg { border: 10px dashed #FFFFFF; }\n.red { border: none; }\nnav a:hover {\n  border: 2px dotted purple;\n}',
+        preview:W('<div style="border:3px solid #00274C;padding:8px;margin-bottom:6px;border-radius:3px">3px solid</div><div style="border:4px dashed #FF0000;padding:8px;margin-bottom:6px;border-radius:3px">4px dashed</div><div style="border:4px dotted purple;padding:8px;border-radius:3px">4px dotted</div>')
+      },
+      { label:'border-[side]',
+        def:'Target individual sides only. border-top, border-right, border-bottom, border-left.',
+        code:'.red {\n  border: none;\n  border-bottom: 2px solid #FFFFFF;\n  border-left: 5px solid #FFFFFF;\n}\n\n.blue {\n  border: none;\n  border-top: 2px solid #FFFFFF;\n  border-right: 5px solid #FFFFFF;\n}',
+        preview:W('<div style="background:#FF0000;color:white;padding:12px;border:none;border-bottom:2px solid white;border-left:5px solid white;margin-bottom:8px;border-radius:0">.red — border-bottom + border-left</div><div style="background:#0000FF;color:white;padding:12px;border:none;border-top:2px solid white;border-right:5px solid white;border-radius:0">.blue — border-top + border-right</div>')
+      },
+      { label:'border-radius',
+        def:'Rounds element corners. Larger value = more rounded. 9999px creates a pill/circle.',
+        code:'.introduction {\n  border-radius: 15px;\n}\n\n.resume-card {\n  border-radius: 8px;\n}\n\n/* Pill */\n.badge { border-radius: 9999px; }',
+        preview:W('<div style="background:#FFCB05;color:#00274C;padding:12px;border-radius:15px;margin-bottom:8px;font-weight:bold">border-radius: 15px (.introduction)</div><div style="background:#00274C;color:white;padding:12px;border-radius:8px;margin-bottom:8px">border-radius: 8px (cards)</div><span style="background:#e8f0fb;color:#00274C;padding:6px 16px;border-radius:9999px;font-size:13px;font-weight:600">Pill: border-radius: 9999px</span>')
+      }
+    ]},
+    { title:'Sizing & overflow', items:[
+      { label:'width / max-width / min-height',
+        def:'width = fixed size. max-width = ceiling (shrinks on small screens). min-height = floor (can still grow).',
+        code:'/* Fixed */\nimg { width: 250px; }\n\n/* Responsive cap */\nimg { max-width: 100%; height: auto; }\nmain { max-width: 1200px; margin: 0 auto; }\n\n/* Can grow but not shrink below */\ndiv { min-height: 125px; }',
+        preview:W('<img src="images/rushmore.jpg" style="max-width:100%;border:2px solid #ccc;border-radius:3px"><p style="font-size:12px;color:#555;margin-top:4px">max-width: 100% — shrinks to fit, never overflows</p><div style="background:#e8f0fb;max-width:280px;margin:8px auto 0;padding:8px;text-align:center;border-radius:3px;font-size:13px">max-width:280px + margin:0 auto</div>')
+      },
+      { label:'overflow: hidden / auto',
+        def:'hidden = clips content exceeding box. auto = adds scrollbar only when content overflows.',
+        code:'.accounts-image {\n  max-height: 675px;\n  overflow: hidden; /* clips image */\n}\n\n.text-block {\n  max-height: 235px;\n  overflow: auto;  /* scrollbar if needed */\n}',
+        preview:W('<div style="max-height:70px;overflow:hidden;border:2px solid #f44336;padding:8px;border-radius:4px;background:#ffebee;margin-bottom:6px"><p>overflow: hidden — clips below 70px.</p><p>This text is cut off!</p><p>And this too!</p></div><div style="max-height:70px;overflow:auto;border:2px solid #4caf50;padding:8px;border-radius:4px;background:#e8f5e9"><p>overflow: auto — scroll appears.</p><p>Scroll down to see more.</p><p>More text here!</p></div>')
+      },
+      { label:'overflow',
+        def:'Controls what happens when content is too large for its box. Values: visible (default, spills out), hidden (clips), scroll (always shows scrollbar), auto (scrollbar only when needed).',
+        code:'/* Default — content spills outside box */\n.box { overflow: visible; }\n\n/* Clip — content beyond box is invisible */\n.box { overflow: hidden; }\n\n/* Always show scrollbar */\n.box { overflow: scroll; }\n\n/* Scrollbar only when content overflows */\n.box { overflow: auto; }\n\n/* Control axes independently */\n.box { overflow-x: hidden; overflow-y: auto; }',
+        preview:W('<style>.ob{width:120px;height:60px;border:2px solid #00274C;padding:6px;font-size:11px;border-radius:4px;margin-bottom:6px;float:left;margin-right:8px}.ob p{margin:0;white-space:nowrap}</style><div class="ob" style="overflow:visible;background:#fff8e1"><strong>visible</strong><p>Content spills out of this box freely</p></div><div class="ob" style="overflow:hidden;background:#ffebee"><strong>hidden</strong><p>Content is clipped at the box edge</p></div><div style="clear:both;height:4px"></div><div class="ob" style="overflow:scroll;background:#e8f5e9"><strong>scroll</strong><p>Always has a scrollbar even if not needed</p></div><div class="ob" style="overflow:auto;background:#e8edf4"><strong>auto</strong><p>Scrollbar only appears when content overflows</p></div><div style="clear:both"></div>')
+      },
+      { label:'display: block',
+        def:'Block element takes full available width. Used on img with margin: auto to center it on the page.',
+        code:'img {\n  display: block;\n  margin: auto; /* centers it */\n  width: 250px;\n  border: 10px dashed #FFFFFF;\n}',
+        preview:W('<img src="images/rushmore.jpg" style="display:block;margin:auto;border:3px dashed #aaa;border-radius:3px;width:150px"><p style="text-align:center;font-size:12px;color:#555;margin-top:5px">display:block + margin:auto = centered</p>')
+      },
+      { label:'box-shadow',
+        def:'Adds shadow behind an element. Format: x-offset y-offset blur-radius color.',
+        code:'main img {\n  box-shadow: 0 2px 8px\n    rgba(0, 0, 0, 0.1);\n}\n\n/* Focus ring */\ninput:focus {\n  box-shadow: 0 0 0 3px var(--um-maize);\n}',
+        preview:W('<img src="images/rushmore.jpg" style="display:block;margin:auto;width:200px;box-shadow:0 4px 16px rgba(0,0,0,0.2);border-radius:6px"><p style="text-align:center;font-size:12px;color:#555;margin-top:6px">0 4px 16px rgba(0,0,0,0.2)</p>')
+      }
+    ]}
+  ]},
+
+  // ── 5. TYPOGRAPHY ─────────────────────────────────────────────────────────
+  { id:'css-type', label:'Typography', groups:[
+    { title:'Font properties', items:[
+      { label:'font-family',
+        def:'Sets the font. Provide a stack of fallbacks. Always end with a generic family (serif, sans-serif, monospace).',
+        code:'/* HW1 */\nbody {\n  font-family: Arial, Verdana;\n}\n\n/* UMSI site */\nbody {\n  font-family: \'Open Sans\',\n    \'Helvetica Neue\',\n    Arial, sans-serif;\n}',
+        preview:W('<p style="font-family:Arial,Verdana">Arial, Verdana — clean sans-serif</p><p style="font-family:Georgia,serif;margin-top:8px">Georgia, serif — classic editorial look</p><p style="font-family:\'Courier New\',monospace;margin-top:8px">Courier New, monospace — code-like</p>')
+      },
+      { label:'font-size: px and rem',
+        def:'px = fixed size. rem = relative to root (16px default = 1rem). rem scales better for accessibility.',
+        code:'/* Fixed px */\nh1 { font-size: 42px; }\np  { font-size: 24px; }\n\n/* Relative rem */\nh1 { font-size: 2rem; }   /* 32px */\nh2 { font-size: 1.5rem; } /* 24px */\np  { font-size: 1rem; }   /* 16px */\nsmall { font-size: 0.9rem; }',
+        preview:W('<h1 style="font-size:2rem;margin-bottom:4px">h1: 2rem = 32px</h1><h2 style="font-size:1.5rem;margin-bottom:4px">h2: 1.5rem = 24px</h2><h3 style="font-size:1.25rem;margin-bottom:4px">h3: 1.25rem = 20px</h3><p style="font-size:1rem">p: 1rem = 16px (base)</p><p style="font-size:0.875rem;color:#555">0.875rem = 14px</p>')
+      },
+      { label:'font-weight',
+        def:'Controls boldness. Numeric: 400=normal, 600=semi-bold, 700=bold. "bold" keyword = 700.',
+        code:'h1 { font-weight: 700; }\nh2 { font-weight: 600; }\nnav a { font-weight: 500; }\nbody { font-weight: 400; } /* normal */\n\n/* Keyword */\nnav a { font-weight: bold; }',
+        preview:W('<p style="font-weight:400;margin-bottom:5px">400 — normal body text</p><p style="font-weight:500;margin-bottom:5px">500 — medium (nav links)</p><p style="font-weight:600;margin-bottom:5px">600 — semi-bold (h2, h3)</p><p style="font-weight:700">700 — bold (h1, strong, active nav)</p>')
+      }
+    ]},
+    { title:'Text properties', items:[
+      { label:'text-align',
+        def:'Horizontal text alignment. Values: left (default), center, right. Applies to block-level elements.',
+        code:'h1 { text-align: center; }\n.red { text-align: right; }\n.blue { text-align: left; }\nfooter p { text-align: right; }',
+        preview:W('<p style="text-align:left;border:1px dashed #ccc;padding:4px;margin-bottom:4px;border-radius:3px">text-align: left (default)</p><p style="text-align:center;border:1px dashed #ccc;padding:4px;margin-bottom:4px;border-radius:3px">text-align: center</p><p style="text-align:right;border:1px dashed #ccc;padding:4px;border-radius:3px">text-align: right</p>')
+      },
+      { label:'text-decoration',
+        def:'Adds or removes text decoration. Most commonly used to remove the default underline from links.',
+        code:'/* Remove underline from nav links */\nnav a {\n  text-decoration: none;\n}\n\n/* Restore underline for body links */\nmain a {\n  text-decoration: underline;\n}',
+        preview:W('<a href="#" style="text-decoration:none;color:#00274C;display:block;margin-bottom:8px">text-decoration: none (no underline)</a><a href="#" style="text-decoration:underline;color:#00274C;display:block;margin-bottom:8px">text-decoration: underline (default link)</a><a href="#" style="text-decoration:line-through;color:#999;display:block">text-decoration: line-through</a>')
+      },
+      { label:'line-height',
+        def:'Controls vertical spacing between lines of text. Unitless number = multiplier of font-size. 1.5–1.7 is comfortable.',
+        code:'.introduction {\n  line-height: 2; /* double-spaced */\n}\n\nbody {\n  line-height: 1.6;\n}\n\nh1 {\n  line-height: 1.2;\n}',
+        preview:W('<div style="border:1px solid #e0e0e0;padding:8px;margin-bottom:5px;border-radius:3px"><p style="line-height:1;font-size:13px">line-height: 1.0 — tight. This text shows how lines stack very close together with no extra space between them.</p></div><div style="border:1px solid #e0e0e0;padding:8px;margin-bottom:5px;border-radius:3px"><p style="line-height:1.6;font-size:13px">line-height: 1.6 — comfortable. This text shows how lines have pleasant breathing room, ideal for body text.</p></div><div style="border:1px solid #e0e0e0;padding:8px;border-radius:3px"><p style="line-height:2;font-size:13px">line-height: 2.0 — double-spaced. Wide gaps between lines, used for .introduction class.</p></div>')
+      },
+      { label:'letter-spacing',
+        def:'Spacing between characters (tracking). em unit is relative to current font-size.',
+        code:'.section-label {\n  letter-spacing: 0.09em;\n  text-transform: uppercase;\n  font-size: 10.5px;\n}',
+        preview:W('<p style="letter-spacing:0;margin-bottom:8px">letter-spacing: 0 (normal)</p><p style="letter-spacing:0.05em;margin-bottom:8px;text-transform:uppercase;font-size:12px">letter-spacing: 0.05em uppercase</p><p style="letter-spacing:0.15em;margin-bottom:8px;text-transform:uppercase;font-size:11px;color:#555;font-weight:700">letter-spacing: 0.15em section label</p>')
+      },
+      { label:'color',
+        def:'Sets text color. Accepts hex (#RRGGBB), rgba(r,g,b,a) for transparency, or CSS custom properties.',
+        code:'/* Hex */\nbody { color: #FFFFFF; }\nh2 { color: #0D0D0D; }\n\n/* CSS variable */\nh1 { color: var(--um-blue); }\n\n/* Semi-transparent */\n.blue p { color: rgba(196,196,196,1); }',
+        preview:W('<p style="color:#00274C;font-weight:bold;margin-bottom:6px">color: #00274C (UM Blue)</p><p style="color:#9A3324;font-weight:bold;margin-bottom:6px">color: #9A3324 (UM Tappan Red)</p><p style="color:rgba(0,0,0,0.5);margin-bottom:6px">color: rgba(0,0,0,0.5) — 50% opacity</p><p style="color:#00B2A9">color: #00B2A9 (UM Arboretum Teal)</p>')
+      }
+    ]}
+  ]},
+
+  // ── 6. GRID LAYOUT ────────────────────────────────────────────────────────
+  { id:'css-layout', label:'Grid Layout', groups:[
+    { title:'Grid container', items:[
+      { label:'display: grid',
+        def:'Turns element into a CSS Grid container. Direct children automatically become grid items.',
+        code:'.container {\n  display: grid;\n  grid-template-columns: 1fr 1fr 1fr 1fr 1fr;\n  gap: 13px;\n}',
+        preview:W('<style>.gc{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}.gc div{background:#00274C;color:#FFCB05;padding:10px;text-align:center;font-size:12px;border-radius:3px}</style><div class="gc"><div>1</div><div>2</div><div>3</div><div>4</div><div>5</div><div>6</div></div><p style="font-size:12px;color:#555;margin-top:8px">3-column grid with gap: 8px</p>')
+      },
+      { label:'grid-template-columns',
+        def:'Defines the number and width of columns. fr = fraction of available space. repeat() is a shorthand.',
+        code:'/* 5 equal columns */\ngrid-template-columns: 1fr 1fr 1fr 1fr 1fr;\n\n/* Same with repeat() */\ngrid-template-columns: repeat(5, 1fr);\n\n/* Desktop breakpoint */\ngrid-template-columns: repeat(7, 1fr);\n\n/* Mobile default */\ngrid-template-columns: 1fr;',
+        preview:W('<style>.g5{display:grid;grid-template-columns:repeat(5,1fr);gap:3px;margin-bottom:8px}.g7{display:grid;grid-template-columns:repeat(7,1fr);gap:3px}.g5 div,.g7 div{background:#e8f0fb;padding:6px 0;text-align:center;font-size:10px;border-radius:2px;color:#00274C;font-weight:600}</style><p style="font-size:11px;font-weight:700;color:#555;margin-bottom:4px">5 COLUMNS (mobile):</p><div class="g5"><div>1</div><div>2</div><div>3</div><div>4</div><div>5</div></div><p style="font-size:11px;font-weight:700;color:#555;margin:6px 0 4px">7 COLUMNS (desktop ≥825px):</p><div class="g7"><div>1</div><div>2</div><div>3</div><div>4</div><div>5</div><div>6</div><div>7</div></div>')
+      },
+      { label:'gap',
+        def:'Space between grid rows and columns. Can be set as one value (both) or row-gap / column-gap separately.',
+        code:'.container { gap: 13px; }\n\n.cards-grid {\n  gap: var(--spacing-md); /* 1.5rem */\n}\n\n/* Separate row and column gap */\n.grid { row-gap: 12px; column-gap: 24px; }',
+        preview:W('<style>.gg{display:grid;grid-template-columns:repeat(3,1fr);margin-bottom:8px}.gap-y{gap:16px}.gap-n{gap:0}.gg div{background:#00274C;color:white;padding:10px;text-align:center;font-size:12px}</style><p style="font-size:11px;font-weight:700;color:#555;margin-bottom:3px">gap: 16px</p><div class="gg gap-y"><div>A</div><div>B</div><div>C</div></div><p style="font-size:11px;font-weight:700;color:#555;margin:6px 0 3px">gap: 0</p><div class="gg gap-n"><div>A</div><div>B</div><div>C</div></div>')
+      }
+    ]},
+    { title:'Grid item placement', items:[
+      { label:'grid-column: 1 / -1',
+        def:'Spans from column line 1 to the very last line (-1 = last line). Makes item fill the entire row.',
+        code:'.overview {\n  grid-column: 1 / -1; /* full width */\n}\n\n.accounts-image {\n  grid-column: 1 / -1; /* full width */\n}',
+        preview:W('<style>.gf{display:grid;grid-template-columns:repeat(5,1fr);gap:4px}.gf .full{grid-column:1/-1;background:#00274C;color:#FFCB05;padding:10px;text-align:center;border-radius:3px;font-size:13px}.gf .cell{background:#e8f0fb;padding:10px;text-align:center;font-size:11px;border-radius:3px;color:#00274C}</style><div class="gf"><div class="full">grid-column: 1 / -1 (spans all 5)</div><div class="cell">1</div><div class="cell">2</div><div class="cell">3</div><div class="cell">4</div><div class="cell">5</div></div>')
+      },
+      { label:'grid-column: start / span n',
+        def:'Start at a column line, span n columns. "span 3" = occupy 3 columns from the start line.',
+        code:'.accounts {\n  grid-column: 2 / span 3;\n  /* start at col line 2,\n     span 3 columns wide */\n  grid-row: 2;\n}',
+        preview:W('<style>.gs{display:grid;grid-template-columns:repeat(5,1fr);gap:4px}.gs div{background:#e8f0fb;padding:8px;text-align:center;font-size:11px;border-radius:2px;color:#00274C}.gs .main{grid-column:2/span 3;background:#00274C;color:#FFCB05;font-size:12px}</style><div class="gs"><div>1</div><div class="main">2 / span 3 (cols 2–4)</div><div>5</div></div>')
+      },
+      { label:'grid-column: start / end',
+        def:'Explicit start and end column lines. Line 1 is before col 1. Line n+1 is after the last column.',
+        code:'.accounts {\n  grid-column: 4 / 7; /* lines 4 to 7 */\n}\n.accounts-image {\n  grid-column: 1 / 6;\n}\n.onlinebanking {\n  grid-column: 2 / 5;\n}',
+        preview:W('<style>.se{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;font-size:10px;margin-bottom:4px}.se div{background:#e8f0fb;padding:7px;text-align:center;border-radius:2px;color:#00274C}.se .a{grid-column:4/7;background:#00274C;color:#FFCB05}.se .b{grid-column:2/5;background:#9A3324;color:white}</style><p style="font-size:10px;color:#555;margin-bottom:3px">Row 1: accounts (4/7)</p><div class="se"><div>1</div><div>2</div><div>3</div><div class="a">4/7</div></div><p style="font-size:10px;color:#555;margin:3px 0">Row 2: onlinebanking (2/5)</p><div class="se"><div>1</div><div class="b">2/5</div><div>5</div><div>6</div><div>7</div></div>')
+      },
+      { label:'grid-row',
+        def:'Places item in a specific row number. When an image and text share the same grid-row, they overlap — creating the bank.html layout.',
+        code:'.accounts {\n  grid-column: 2 / span 3;\n  grid-row: 2;  /* text block */\n}\n\n.accounts-image {\n  grid-column: 1 / -1;\n  grid-row: 2;  /* same row = overlap! */\n}',
+        preview:W('<style>.ovr{display:grid;grid-template-columns:repeat(5,1fr);gap:4px}.ovr .img{grid-column:1/-1;grid-row:1;background:linear-gradient(135deg,#00274C,#0055a4);padding:36px;border-radius:4px}.ovr .txt{grid-column:2/span 3;grid-row:1;background:rgba(255,255,255,0.9);padding:10px;border-radius:4px;font-size:12px;align-self:center;text-align:center;border:10px solid black;z-index:1}</style><div class="ovr"><div class="img"></div><div class="txt"><strong>Text overlays image!</strong><br>Same grid-row = overlap</div></div>')
+      },
+      { label:'align-self / justify-self',
+        def:'Aligns a single grid item within its cell. align-self = vertical axis. justify-self = horizontal axis.',
+        code:'.text-block {\n  align-self: center;    /* vertical */\n  justify-self: center;  /* horizontal */\n}',
+        preview:W('<style>.aj{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:100px;gap:8px}.aj div{background:#e8f0fb;padding:8px;font-size:12px;border:1px dashed #aaa;border-radius:3px;color:#00274C}.aj .ac{align-self:center}.aj .jc{justify-self:center;width:fit-content;align-self:start}</style><div class="aj"><div class="ac">align-self:<br>center<br>(vertical)</div><div class="jc">justify-self: center (horiz.)</div></div>')
+      },
+      { label:'align-content',
+        def:'VERTICAL — aligns rows of grid (or flex) items along the vertical (cross) axis when there is extra space in the container. Only has effect when there are multiple rows. Values: start, end, center, space-between, space-around, space-evenly, stretch (default).',
+        code:'.container {\n  display: grid;\n  grid-template-columns: repeat(3, 1fr);\n  height: 300px; /* extra vertical space needed */\n\n  align-content: start;         /* rows packed to top */\n  align-content: center;        /* rows centered */\n  align-content: end;           /* rows packed to bottom */\n  align-content: space-between; /* first/last row at edges */\n  align-content: space-around;  /* equal space around rows */\n  align-content: space-evenly;  /* equal space between rows */\n  align-content: stretch;       /* rows stretch to fill (default) */\n}',
+        preview:W('<style>.ac-wrap{display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px;height:130px;border:2px dashed #00274C;border-radius:4px;padding:4px}.ac-wrap div{background:#00274C;color:#FFCB05;text-align:center;font-size:11px;padding:4px;border-radius:2px}.ac-sb{align-content:space-between}.ac-c{align-content:center}.ac-sa{align-content:space-around}.ac-se{align-content:space-evenly}.ac-st{align-content:stretch}.label{font-size:11px;color:#555;margin:4px 0 2px}</style><p class="label">space-between:</p><div class="ac-wrap ac-sb"><div>1</div><div>2</div><div>3</div><div>4</div><div>5</div><div>6</div></div><p class="label">center:</p><div class="ac-wrap ac-c"><div>1</div><div>2</div><div>3</div><div>4</div><div>5</div><div>6</div></div><p class="label">space-around:</p><div class="ac-wrap ac-sa"><div>1</div><div>2</div><div>3</div><div>4</div><div>5</div><div>6</div></div><p class="label">space-evenly:</p><div class="ac-wrap ac-se"><div>1</div><div>2</div><div>3</div><div>4</div><div>5</div><div>6</div></div><p class="label">stretch:</p><div class="ac-wrap ac-st"><div>1</div><div>2</div><div>3</div><div>4</div><div>5</div><div>6</div></div>')
+      },
+      { label:'justify-content',
+        def:'HORIZONTAL — aligns columns of grid (or flex) items along the horizontal (main) axis when there is extra space in the container. Values: start (default), end, center, space-between, space-around, space-evenly, stretch.',
+        code:'.container {\n  display: grid;\n  grid-template-columns: repeat(3, 80px); /* fixed cols, extra space */\n\n  justify-content: start;         /* cols packed to left */\n  justify-content: center;        /* cols centered */\n  justify-content: end;           /* cols packed to right */\n  justify-content: space-between; /* first/last col at edges */\n  justify-content: space-around;  /* equal space around cols */\n  justify-content: space-evenly;  /* equal space between cols */\n}',
+        preview:W('<style>.jc-wrap{display:grid;grid-template-columns:repeat(3,50px);gap:4px;border:2px dashed #00274C;border-radius:4px;padding:4px;margin-bottom:6px}.jc-wrap div{background:#00274C;color:#FFCB05;text-align:center;font-size:11px;padding:6px;border-radius:2px}.jc-sb{justify-content:space-between}.jc-c{justify-content:center}.label{font-size:11px;color:#555;margin-bottom:2px}</style><p class="label">space-between:</p><div class="jc-wrap jc-sb"><div>1</div><div>2</div><div>3</div></div><p class="label">center:</p><div class="jc-wrap jc-c"><div>1</div><div>2</div><div>3</div></div>')
+      },
+      { label:'align-items',
+        def:'Aligns grid (or flex) items vertically within their individual row tracks. Unlike align-content (which moves whole rows), align-items controls each item inside its cell. Values: stretch (default), start, end, center, baseline.',
+        code:'.container {\n  display: grid;\n  grid-template-columns: repeat(3, 1fr);\n  grid-template-rows: 100px; /* tall row to see effect */\n\n  align-items: stretch;  /* items fill row height (default) */\n  align-items: start;    /* items stick to top of cell */\n  align-items: end;      /* items stick to bottom of cell */\n  align-items: center;   /* items centered vertically */\n  align-items: baseline; /* items aligned by text baseline */\n}',
+        preview:W('<style>.ai-wrap{display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px;height:90px;border:2px dashed #00274C;border-radius:4px;padding:4px;margin-bottom:4px}.ai-wrap div{background:#00274C;color:#FFCB05;text-align:center;font-size:11px;padding:4px;border-radius:2px}.ai-s{align-items:start}.ai-c{align-items:center}.ai-e{align-items:end}.ai-st{align-items:stretch}.ai-bl{align-items:baseline}.label{font-size:11px;color:#555;margin:4px 0 2px}</style><p class="label">start:</p><div class="ai-wrap ai-s"><div>1</div><div>2</div><div>3</div></div><p class="label">center:</p><div class="ai-wrap ai-c"><div>1</div><div>2</div><div>3</div></div><p class="label">end:</p><div class="ai-wrap ai-e"><div>1</div><div>2</div><div>3</div></div><p class="label">stretch (default):</p><div class="ai-wrap ai-st"><div>1</div><div>2</div><div>3</div></div><p class="label">baseline:</p><div class="ai-wrap ai-bl"><div style="font-size:8px">small</div><div style="font-size:14px">big</div><div style="font-size:11px">mid</div></div>')
+      },
+      { label:'justify-items',
+        def:'HORIZONTAL — aligns grid items horizontally within their individual column cells. Unlike justify-content (which moves whole columns), justify-items controls each item inside its cell. Values: stretch (default), start, end, center.',
+        code:'.container {\n  display: grid;\n  grid-template-columns: repeat(3, 1fr);\n\n  justify-items: stretch; /* items fill cell width (default) */\n  justify-items: start;   /* items stick to left of cell */\n  justify-items: end;     /* items stick to right of cell */\n  justify-items: center;  /* items centered horizontally */\n}',
+        preview:W('<style>.ji-wrap{display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px;border:2px dashed #00274C;border-radius:4px;padding:4px;margin-bottom:4px}.ji-wrap div{background:#00274C;color:#FFCB05;text-align:center;font-size:11px;padding:4px;border-radius:2px}.ji-s{justify-items:start}.ji-c{justify-items:center}.ji-e{justify-items:end}.ji-st{justify-items:stretch}.label{font-size:11px;color:#555;margin:4px 0 2px}</style><p class="label">start:</p><div class="ji-wrap ji-s"><div>1</div><div>2</div><div>3</div></div><p class="label">center:</p><div class="ji-wrap ji-c"><div>1</div><div>2</div><div>3</div></div><p class="label">end:</p><div class="ji-wrap ji-e"><div>1</div><div>2</div><div>3</div></div><p class="label">stretch (default):</p><div class="ji-wrap ji-st"><div>1</div><div>2</div><div>3</div></div>')
+      }
+    ]}
+  ]},
+
+  // ── 7. BACKGROUNDS ────────────────────────────────────────────────────────
+  { id:'css-bg', label:'Backgrounds', groups:[
+    { title:'Background color', items:[
+      { label:'background-color: #hex',
+        def:'Solid background color using hex values. #RRGGBB — each pair is 00–FF (0–255).',
+        code:'body  { background-color: #000000; }\n.red  { background-color: #FF0000; }\n.blue { background-color: #0000FF; }\n.yellow { background-color: #FFFF00; }\n.green  { background-color: #008500; }',
+        preview:W('<div style="background:#FF0000;padding:8px;color:white;margin-bottom:4px;border-radius:3px">#FF0000 — red</div><div style="background:#0000FF;padding:8px;color:white;margin-bottom:4px;border-radius:3px">#0000FF — blue</div><div style="background:#FFFF00;padding:8px;color:#333;margin-bottom:4px;border-radius:3px">#FFFF00 — yellow</div><div style="background:#008500;padding:8px;color:white;border-radius:3px">#008500 — green</div>')
+      },
+      { label:'background-color: rgba()',
+        def:'Semi-transparent background. rgba(red, green, blue, alpha). Alpha: 0 = transparent, 1 = opaque.',
+        code:'.text-block {\n  background-color: rgba(255, 255, 255, .8);\n  /* white at 80% opacity */\n}',
+        preview:W('<div style="background:linear-gradient(135deg,#00274C,#0066cc);padding:24px;border-radius:6px"><div style="background:rgba(255,255,255,0.8);padding:12px;border-radius:4px"><p style="font-size:13px;color:#222"><strong>rgba(255,255,255,0.8)</strong><br>White at 80% opacity — background image shows through subtly.</p></div></div>')
+      }
+    ]},
+    { title:'Linear gradient', items:[
+      { label:'linear-gradient()',
+        def:'Smooth transition between colors. Specify direction and color stops. Can have stops at specific percentages.',
+        code:'footer {\n  background: linear-gradient(\n    to right,\n    #000000,\n    #0000FF 25%,\n    #0066FF 70%,\n    #000000\n  );\n}',
+        preview:W('<div style="background:linear-gradient(to right,#000000,#0000FF 25%,#0066FF 70%,#000000);padding:16px;border-radius:4px;color:white;text-align:center;margin-bottom:8px">black → blue → lighter blue → black</div><footer style="background:linear-gradient(to right,#000000,#0000FF 25%,#0066FF 70%,#000000);border:5px solid white"><p>Colleen van Lent © 2023</p></footer>')
+      }
+    ]},
+    { title:'Background image (parallax)', items:[
+      { label:'background-image: url()',
+        def:'Sets a CSS background image. Path is relative to the CSS file location, NOT the HTML file.',
+        code:'.overview {\n  background-image:\n    url(\'../images/header.jpg\');\n}',
+        preview:W('<div style="background-image:url(\'images/header.jpg\');height:100px;display:flex;align-items:center;justify-content:center;border-radius:4px"><span style="background:rgba(0,0,0,0.6);color:white;padding:6px 12px;border-radius:3px;font-size:13px">background-image applied</span></div><div class="note" style="margin-top:8px">Path is from CSS file: url(\'../images/\') goes up one folder.</div>')
+      },
+      { label:'background-size: cover',
+        def:'Scales image to fill the entire element. Maintains aspect ratio — may crop edges. Most common value for hero images.',
+        code:'.overview {\n  background-size: cover;\n  /* fills div, may crop */\n}',
+        preview:W('<div style="background-image:url(\'images/header.jpg\');background-size:cover;height:100px;width:100%;border-radius:4px;border:2px solid #ccc"></div><p style="font-size:12px;color:#555;margin-top:5px">cover: fills div completely, maintains ratio, may crop</p>')
+      },
+      { label:'background-position / repeat',
+        def:'position: center keeps focal point centered as image crops. repeat: no-repeat prevents tiling.',
+        code:'.overview {\n  background-position: center;\n  background-repeat: no-repeat;\n  background-size: cover;\n}',
+        preview:W('<div style="background-image:url(\'images/wide_landscape.avif\');background-size:cover;background-position:center;background-repeat:no-repeat;height:90px;border-radius:4px"></div><p style="font-size:12px;color:#555;margin-top:5px">Centered, no-repeat, cover — the parallax combo</p>')
+      },
+      { label:'background-attachment: fixed',
+        def:'Parallax effect — image stays fixed relative to viewport while page scrolls. Disable in reduced-motion queries.',
+        code:'.overview {\n  background-attachment: fixed;\n  background-position: center;\n  background-repeat: no-repeat;\n  background-size: cover;\n  height: 400px;\n}\n\n/* Reduced motion override */\n@media (prefers-reduced-motion: reduce) {\n  header {\n    background-attachment: initial;\n  }\n}',
+        preview:W('<div class="note"><strong>background-attachment: fixed</strong><br>Image doesn\'t scroll with page — creates depth/parallax effect.<br><br>The four parallax properties together:<br>• background-attachment: fixed<br>• background-position: center<br>• background-repeat: no-repeat<br>• background-size: cover</div><div class="bad" style="margin-top:8px">Always reset to initial in @media (prefers-reduced-motion: reduce)!</div>')
+      }
+    ]},
+    { title:'Object fit', items:[
+      { label:'object-fit: cover',
+        def:'For <img> tags inside sized containers: fills the box while maintaining aspect ratio. May crop.',
+        code:'.accounts-image img {\n  display: block;\n  width: 100%;\n  height: 100%;\n  max-height: 675px;\n  object-fit: cover;\n}',
+        preview:W('<div style="width:100%;height:100px;overflow:hidden;border-radius:4px"><img src="images/rushmore.jpg" style="width:100%;height:100%;object-fit:cover;display:block"></div><p style="font-size:12px;color:#555;margin-top:5px">object-fit: cover — img fills container, maintains ratio, crops</p>')
+      }
+    ]}
+  ]},
+
+  // ── 8. POSITIONING ────────────────────────────────────────────────────────
+  { id:'css-pos', label:'Positioning', groups:[
+    { title:'Skip link pattern', items:[
+      { label:'position: absolute',
+        def:'Removes element from normal flow. Positioned relative to nearest positioned ancestor (or viewport).',
+        code:'.skip a {\n  position: absolute;\n  top: -65px;   /* hidden above viewport */\n  left: 0;\n  z-index: 9999;\n}\n\n.skip a:focus {\n  top: 25px;    /* visible on keyboard focus */\n}',
+        preview:W('<style>.sk-wrap{position:relative;height:90px;border:1px solid #ccc;border-radius:4px;overflow:visible}.sk-wrap a{position:absolute;top:-65px;left:0;background:#FFCB05;color:#00274C;padding:8px 14px;font-weight:bold;text-decoration:none;border-radius:0 0 4px 0;transition:top 0.3s}.sk-wrap a:focus{top:0}</style><div class="sk-wrap"><a href="#">Skip to Main Content</a><div style="padding:10px;padding-top:32px"><p style="font-size:12px;color:#555">↑ Tab here to reveal the skip link above</p></div></div>')
+      },
+      { label:'top / left / z-index',
+        def:'top and left position an absolute/fixed element. z-index controls stacking — higher value = in front.',
+        code:'.skip a {\n  position: absolute;\n  top: -40px;    /* above viewport */\n  left: 0;       /* left edge */\n  z-index: 9999; /* always on top */\n}',
+        preview:W('<style>.zw{position:relative;height:90px}.z1{position:absolute;background:#FF6B6B;color:white;padding:8px 14px;top:10px;left:10px;z-index:1;border-radius:3px}.z2{position:absolute;background:#00274C;color:#FFCB05;padding:8px 14px;top:25px;left:55px;z-index:2;border-radius:3px}.z3{position:absolute;background:#4caf50;color:white;padding:8px 14px;top:40px;left:100px;z-index:3;border-radius:3px}</style><div class="zw"><div class="z1">z-index: 1</div><div class="z2">z-index: 2</div><div class="z3">z-index: 3 (top)</div></div>')
+      }
+    ]},
+    { title:'Transitions', items:[
+      { label:'transition',
+        def:'Smoothly animates CSS property changes. Format: property duration easing-function.',
+        code:'nav a {\n  transition:\n    background-color 0.3s ease,\n    transform 0.2s ease;\n}\n\na {\n  transition: color 0.3s ease;\n}\n\n.skip a {\n  transition: top 1s ease-out;\n  -webkit-transition: top 1s ease-out;\n}',
+        preview:W('<style>.tl{display:inline-block;padding:8px 16px;background:#00274C;color:#FFCB05;text-decoration:none;border-radius:4px;transition:background-color 0.3s ease,transform 0.2s ease;margin-bottom:8px}.tl:hover{background:#0055a4;transform:translateY(-3px)}.tc{color:#00274C;transition:color 0.3s ease;font-weight:bold}.tc:hover{color:#00B2A9}</style><a class="tl" href="#">Hover — smooth bg + translateY</a><br><a class="tc" href="#">Hover — color transition</a>')
+      },
+      { label:'-webkit-transition (vendor prefix)',
+        def:'Older WebKit (Safari) prefix for transition. Always pair with the standard property.',
+        code:'.skip a {\n  -webkit-transition: top 1s ease-out;\n  transition: top 1s ease-out;\n}',
+        preview:W('<div class="note">Vendor prefixes came before properties were standardized.<br><br>Pattern: always write the prefixed version FIRST, then the standard unprefixed version last.<br><br>Common prefix: <strong>-webkit-</strong> (Safari/Chrome)<br>Less common: <strong>-moz-</strong> (Firefox), <strong>-ms-</strong> (IE)</div>')
+      },
+      { label:'transition: none (reduced motion)',
+        def:'Remove all transitions inside @media (prefers-reduced-motion: reduce). Required accessibility practice.',
+        code:'@media (prefers-reduced-motion: reduce) {\n  .skip a {\n    -webkit-transition: none;\n    transition: none;\n  }\n  html {\n    scroll-behavior: auto;\n  }\n}',
+        preview:W('<div class="bad"><strong>Forgetting reduced-motion is an accessibility failure.</strong><br><br>Users with vestibular disorders (motion sickness) set "Reduce Motion" in their OS settings. This media query detects it.</div><div class="good" style="margin-top:8px">Inside the query: set transition: none, scroll-behavior: auto, background-attachment: initial</div>')
+      }
+    ]},
+    { title:'Transform & scroll', items:[
+      { label:'transform: translateY()',
+        def:'Moves element vertically without affecting surrounding layout. Negative = up. Used for nav link hover lift.',
+        code:'nav a:hover {\n  transform: translateY(-2px);\n  /* lifts up 2px */\n}',
+        preview:W('<style>.ty{display:inline-block;padding:8px 14px;background:#00274C;color:#FFCB05;text-decoration:none;border-radius:4px;transition:transform 0.2s ease;margin:4px}.ty:hover{transform:translateY(-4px)}</style><div><a class="ty" href="#">Hover me</a><a class="ty" href="#">And me</a></div><p style="font-size:12px;color:#555;margin-top:8px">translateY(-4px) moves element up 4px — gives a "lift" effect.</p>')
+      },
+      { label:'scroll-behavior: smooth',
+        def:'Animates scrolling when anchor links are clicked. Applied to the html element. Disable in reduced-motion query.',
+        code:'html {\n  scroll-behavior: smooth;\n}\n\n@media (prefers-reduced-motion: reduce) {\n  html {\n    scroll-behavior: auto; /* instant */\n  }\n}',
+        preview:W('<div class="good"><strong>scroll-behavior: smooth</strong><br>Clicking href="#section" glides smoothly to the target instead of jumping.</div><div class="bad" style="margin-top:8px">Remember: override with scroll-behavior: auto in the prefers-reduced-motion media query!</div>')
+      }
+    ]}
+  ]},
+
+  // ── 9. VARIABLES & MEDIA QUERIES ──────────────────────────────────────────
+  { id:'css-vars', label:'Variables & MQ', groups:[
+    { title:'CSS custom properties (variables)', items:[
+      { label:':root { --name: value; }',
+        def:'Declare custom properties on :root to make them available globally. Convention: two dashes prefix.',
+        code:':root {\n  --um-blue:   #00274C;\n  --um-maize:  #FFCB05;\n  --um-arboretum-blue: #00B2A9;\n  --um-tappan-red: #9A3324;\n  --spacing-sm: 1rem;\n  --spacing-md: 1.5rem;\n}',
+        preview:W('<style>:root{--d-blue:#00274C;--d-maize:#FFCB05;--d-sp:12px}.v1{background:var(--d-blue);color:var(--d-maize);padding:var(--d-sp);border-radius:4px;margin-bottom:6px}.v2{background:var(--d-maize);color:var(--d-blue);padding:var(--d-sp);border-radius:4px}</style><div class="v1">--um-blue bg + --um-maize text</div><div class="v2">--um-maize bg + --um-blue text</div>')
+      },
+      { label:'var(--name)',
+        def:'References a custom property. Optional fallback: var(--name, fallbackValue). If undefined, falls back gracefully.',
+        code:'h1 { color: var(--um-blue); }\n\nnav a.active {\n  background: var(--um-maize);\n  color: var(--um-blue);\n}\n\n/* With fallback */\np {\n  font-size: var(--font-size, 16px);\n}',
+        preview:W('<style>:root{--d2-blue:#00274C;--d2-maize:#FFCB05}h1.v{color:var(--d2-blue);font-size:22px}a.v{background:var(--d2-maize);color:var(--d2-blue);padding:5px 12px;text-decoration:none;border-radius:3px;font-weight:bold;display:inline-block;margin-top:8px}</style><h1 class="v">h1 using var(--um-blue)</h1><a class="v" href="#">Active link using var(--um-maize)</a>')
+      },
+      { label:'spacing scale variables',
+        def:'Define a consistent spacing system as variables. Used for all padding, margin, and gap in the UMSI stylesheet.',
+        code:':root {\n  --spacing-xs: 0.5rem;  /*  8px */\n  --spacing-sm: 1rem;    /* 16px */\n  --spacing-md: 1.5rem;  /* 24px */\n  --spacing-lg: 2rem;    /* 32px */\n  --spacing-xl: 3rem;    /* 48px */\n}',
+        preview:W('<style>:root{--xs:0.5rem;--sm:1rem;--md:1.5rem;--lg:2rem}.sp{background:#e8f0fb;border-left:3px solid #00274C;margin-bottom:4px;color:#00274C;font-size:13px}</style><div class="sp" style="padding:var(--xs)">--spacing-xs: 0.5rem (8px)</div><div class="sp" style="padding:var(--sm)">--spacing-sm: 1rem (16px)</div><div class="sp" style="padding:var(--md)">--spacing-md: 1.5rem (24px)</div><div class="sp" style="padding:var(--lg)">--spacing-lg: 2rem (32px)</div>')
+      }
+    ]},
+    { title:'Media queries', items:[
+      { label:'@media screen and (min-width)',
+        def:'Mobile-first breakpoint. Base styles are for mobile. Styles inside the query override when screen is AT LEAST that wide.',
+        code:'/* Mobile-first base */\n.container {\n  grid-template-columns: 1fr;\n}\n\nnav ul {\n  flex-direction: column;\n}\n\n/* Desktop ≥825px */\n@media screen and (min-width: 825px) {\n  .container {\n    grid-template-columns: repeat(7, 1fr);\n  }\n  nav {\n    text-align: right;\n  }\n}',
+        preview:W('<div class="note"><strong>Mobile-first pattern:</strong><br>Write base styles for smallest screen, then use min-width to progressively enhance for larger screens.</div><div style="font-family:monospace;font-size:12px;background:#1e1e2e;color:#cdd6f4;padding:10px;border-radius:4px;margin-top:8px;line-height:1.8">/* mobile: 1 col */<br>.grid { grid-template-columns: 1fr; }<br><br>/* ≥825px: 7 cols */<br>@media (min-width:825px) {<br>  .grid { grid-template-columns: repeat(7,1fr); }<br>}</div>')
+      },
+      { label:'@media (prefers-reduced-motion: reduce)',
+        def:'Detects OS "Reduce Motion" accessibility setting. Disable ALL animations, transitions, and parallax inside.',
+        code:'@media screen and\n(prefers-reduced-motion: reduce) {\n\n  *, *::before, *::after {\n    animation-duration: 0.01ms !important;\n    transition-duration: 0.01ms !important;\n    scroll-behavior: auto !important;\n  }\n\n  header {\n    background-attachment: initial;\n  }\n}',
+        preview:W('<div class="bad"><strong>Required accessibility practice!</strong><br>Users with vestibular disorders set "Reduce Motion" in System Settings. Ignoring this can cause physical discomfort.</div><div class="note" style="margin-top:8px">Inside the query, disable:<br>• animation-duration → 0.01ms<br>• transition-duration → 0.01ms<br>• scroll-behavior → auto<br>• background-attachment → initial (kills parallax)</div>')
+      }
+    ]}
+  ]},
+
+  // ── 10. ACCESSIBILITY ─────────────────────────────────────────────────────
+  { id:'a11y', label:'Accessibility', groups:[
+    { title:'Skip to main content', items:[
+      { label:'Skip link pattern (full)',
+        def:'First focusable element in <body>. Visually hidden until focused. Lets keyboard users jump past navigation.',
+        code:'<!-- First child of body -->\n<a href="#main">Skip to Main Content</a>\n\n<!-- Target: id="main" on main -->\n<main id="main">...</main>\n\n/* CSS — hidden by default */\nheader a[href="#main"] {\n  position: absolute;\n  top: -40px;\n  left: 0;\n  z-index: 9999;\n  background: var(--um-maize);\n}\nheader a[href="#main"]:focus {\n  top: 0;\n}',
+        preview:W('<style>.sk2{position:relative;min-height:90px;border:1px solid #ccc;border-radius:4px}.sk2 a{position:absolute;top:-60px;left:0;background:#FFCB05;color:#00274C;padding:8px 14px;font-weight:bold;text-decoration:none;border-radius:0 0 4px 0;transition:top 0.3s}.sk2 a:focus{top:0}</style><div class="sk2"><a href="#mk">Skip to Main Content</a><div style="padding:10px;padding-top:30px"><nav style="background:#00274C;color:white;padding:6px 8px;font-size:12px;border-radius:3px">Navigation (keyboard users can bypass this)</nav></div></div><main id="mk" style="border:2px solid #00274C;padding:8px;margin-top:6px;border-radius:4px;font-size:12px">✓ Main content — skip link target (id="main")</main>')
+      }
+    ]},
+    { title:'Focus styles', items:[
+      { label:'outline vs border for focus',
+        def:'Use outline (not border) for focus styles — outline does not affect layout/box dimensions. Border can cause layout shifts.',
+        code:'/* PREFERRED — outline is layout-safe */\na:focus {\n  outline: 3px solid var(--um-maize);\n  outline-offset: 2px;\n}\n\n/* Less ideal — border shifts box size */\nnav a:focus {\n  border: 2px dotted purple;\n}',
+        preview:W('<style>.of1:focus{outline:3px solid #FFCB05;outline-offset:2px;border-radius:2px}.of2:focus{border:3px dotted purple}</style><p style="font-size:12px;margin-bottom:8px">Tab between these to compare:</p><a class="of1" href="#" style="padding:6px 12px;background:#00274C;color:white;text-decoration:none;border-radius:3px;display:inline-block;margin-right:8px">outline (preferred)</a><a class="of2" href="#" style="padding:6px 12px;background:#e8e8e8;border-radius:3px;text-decoration:none;color:#333;display:inline-block">border focus</a>')
+      },
+      { label:'outline-offset',
+        def:'Gap between the element edge and the outline. Creates breathing room so outline doesn\'t overlap the element.',
+        code:'a:focus {\n  outline: 3px solid var(--um-maize);\n  outline-offset: 2px; /* 2px gap */\n}\n\n*:focus-visible {\n  outline: 3px solid var(--um-maize);\n  outline-offset: 2px;\n}',
+        preview:W('<style>a.oo:focus{outline:3px solid #FFCB05;outline-offset:6px;border-radius:2px}</style><p style="font-size:12px;margin-bottom:8px">Tab to see outline with offset:</p><a class="oo" href="#" style="padding:6px 12px;background:#00274C;color:white;text-decoration:none;border-radius:3px;display:inline-block">Focus me — offset 6px</a><p style="font-size:12px;color:#555;margin-top:8px">The maize outline appears with a 6px gap around the button.</p>')
+      }
+    ]},
+    { title:'Semantic HTML', items:[
+      { label:'lang="en" on html',
+        def:'Tells screen readers the language for correct pronunciation. Also helps translation tools and search engines.',
+        code:'<html lang="en">\n<!-- English pronunciation -->\n\n<html lang="zh">\n<!-- Chinese pronunciation -->\n\n<html lang="es">\n<!-- Spanish pronunciation -->',
+        preview:W('<div class="good">✓ <strong>lang="en"</strong> on &lt;html&gt;<br>Screen readers: correct English pronunciation<br>Translation services: correct detection<br>SEO: language-specific indexing</div>')
+      },
+      { label:'alt text on images',
+        def:'Required on every <img>. Good alt text describes who/what/where. Empty alt="" is correct for decorative images.',
+        code:'<!-- Informative -->\n<img src="badlands.jpg"\n  alt="A boy and two girls in\n  front of the Ben Reifel\n  Visitor Center in Badlands\n  National Park">\n\n<!-- Decorative -->\n<img src="divider.png" alt="">',
+        preview:W('<img src="broken.jpg" alt="A boy and two girls in front of the Badlands sign" style="border:2px dashed #ccc;padding:4px;border-radius:3px"><p style="font-size:12px;color:#555;margin-top:4px">↑ Image fails → alt text shows in its place</p><div class="note" style="margin-top:8px"><strong>Good:</strong> describes specific who/what<br><strong>Bad:</strong> "image.jpg", "photo", "picture"<br><strong>Decorative:</strong> alt="" (empty, NOT missing)</div>')
+      },
+      { label:'Semantic landmark tags',
+        def:'<header>, <nav>, <main>, <footer>, <section> create navigable landmarks for screen reader users.',
+        code:'<body>\n  <header>  ← banner\n    <nav>   ← navigation\n    </nav>\n  </header>\n  <main id="main">   ← main\n    <section>...\n  </main>\n  <footer>  ← contentinfo\n  </footer>\n</body>',
+        preview:W('<div style="font-size:12px"><div style="background:#FFCB05;color:#00274C;padding:6px 8px;border-radius:3px;margin-bottom:3px;font-weight:600">📍 &lt;header&gt; → "banner" landmark</div><div style="background:#e8f0fb;color:#00274C;padding:6px 8px;border-radius:3px;margin:0 0 3px 14px;font-weight:600">🔗 &lt;nav&gt; → "navigation" landmark</div><div style="background:#e8f5e9;color:#1a5c2e;padding:6px 8px;border-radius:3px;margin-bottom:3px;font-weight:600">📄 &lt;main&gt; → "main" landmark</div><div style="background:#f0f0f0;padding:6px 8px;border-radius:3px;margin:0 0 3px 14px">📦 &lt;section&gt; → section</div><div style="background:#333;color:#ccc;padding:6px 8px;border-radius:3px;font-weight:600">📌 &lt;footer&gt; → "contentinfo" landmark</div></div>')
+      }
+    ]},
+    { title:'Utility classes & touch targets', items:[
+      { label:'.sr-only class',
+        def:'Visually hides content while keeping it in the accessibility tree — screen readers can read it but sighted users don\'t see it.',
+        code:'.sr-only {\n  position: absolute;\n  width: 1px;\n  height: 1px;\n  padding: 0;\n  margin: -1px;\n  overflow: hidden;\n  clip: rect(0, 0, 0, 0);\n  white-space: nowrap;\n  border-width: 0;\n}',
+        preview:W('<style>.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border-width:0}</style><p>Sighted users see: <strong>3 alerts</strong></p><p>Screen reader says: "3 <span class="sr-only">unread</span> alerts"</p><div class="note" style="margin-top:8px">Clipped to 1×1px — invisible visually, but still in the DOM accessibility tree.</div>')
+      },
+      { label:'min-height: 44px',
+        def:'Apple HIG recommendation — touch targets should be at least 44×44px for comfortable tapping on mobile.',
+        code:'nav a {\n  min-height: 44px;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  padding: var(--spacing-sm);\n}',
+        preview:W('<style>.t44{min-height:44px;display:flex;align-items:center;justify-content:center;background:#00274C;color:#FFCB05;text-decoration:none;border-radius:4px;padding:0 16px;margin-bottom:8px;width:fit-content;font-weight:600}.t-sm{display:inline-block;background:#ccc;color:#333;padding:2px 8px;text-decoration:none;border-radius:2px;font-size:12px}</style><a class="t44" href="#">44px tall nav link ✓</a><a class="t-sm" href="#">Too small ✗ (&lt;44px)</a><p style="font-size:12px;color:#555;margin-top:8px">Larger touch targets reduce mis-taps on mobile.</p>')
+      }
+    ]}
+  ]}
+];
+
+// ── FLATTEN ALL ITEMS ─────────────────────────────────────────────────────────
+const allItems = [];
+TABS.forEach(tab => {
+  tab.groups.forEach(group => {
+    group.items.forEach(item => {
+      allItems.push({ ...item, tabId: tab.id, tabLabel: tab.label, groupTitle: group.title });
+    });
+  });
+});
+
+// ── STATE ─────────────────────────────────────────────────────────────────────
+let activeTab = TABS[0].id;
+let searchQuery = '';
+let previewTimer = null;
+let hideTimer = null;
+
+// ── ESCAPE HTML ───────────────────────────────────────────────────────────────
+function esc(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// ── HIGHLIGHT SEARCH TERM ─────────────────────────────────────────────────────
+function hilite(text, q) {
+  if (!q || q.length < 2) return esc(text);
+  const re = new RegExp('(' + q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&') + ')', 'gi');
+  return esc(text).replace(re, '<mark class="hl">$1</mark>');
+}
+
+// ── CARD HTML ─────────────────────────────────────────────────────────────────
+function cardHtml(item, q, showBadge) {
+  return `<div class="card" data-label="${esc(item.label)}">
+    ${showBadge ? `<div class="tab-badge">${esc(item.tabLabel)} › ${esc(item.groupTitle)}</div>` : ''}
+    <div class="card-top">
+      <span class="card-label">${hilite(item.label, q)}</span>
+      ${item.preview ? `<button class="preview-btn" tabindex="-1">hover for preview</button>` : ''}
+    </div>
+    <div class="card-def">${hilite(item.def, q)}</div>
+    <pre class="card-code">${hilite(item.code, q)}</pre>
+  </div>`;
+}
+
+// ── RENDER TABS BAR ───────────────────────────────────────────────────────────
+function renderTabsBar() {
+  const bar = document.getElementById('tabsBar');
+  bar.innerHTML = TABS.map(t =>
+    `<button class="tab-btn${t.id === activeTab ? ' active' : ''}" data-tab="${t.id}">${esc(t.label)}</button>`
+  ).join('');
+  bar.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      activeTab = btn.dataset.tab;
+      searchQuery = '';
+      document.getElementById('search').value = '';
+      render();
+      renderTabsBar();
+    });
+  });
+}
+
+// ── RENDER CONTENT ────────────────────────────────────────────────────────────
+function render() {
+  const content = document.getElementById('content');
+  const pill = document.getElementById('matchPill');
+  const q = searchQuery.trim().toLowerCase();
+
+  if (q.length >= 2) {
+    const results = allItems.filter(item =>
+      item.label.toLowerCase().includes(q) ||
+      item.def.toLowerCase().includes(q) ||
+      item.code.toLowerCase().includes(q)
+    );
+    const count = results.length;
+    pill.textContent = `${count} match${count !== 1 ? 'es' : ''}`;
+    pill.classList.add('show');
+
+    if (count === 0) {
+      content.innerHTML = `<div class="no-results"><span>🔍</span>No matches for "<strong>${esc(q)}</strong>"<br><small>Try shorter terms, e.g. "grid" or "hover"</small></div>`;
+    } else {
+      content.innerHTML = `<div class="search-note">Showing ${count} result${count!==1?'s':''} across all tabs for "<strong>${esc(q)}</strong>" — Esc to clear</div>
+        <div class="cards-grid">${results.map(item => cardHtml(item, searchQuery.trim(), true)).join('')}</div>`;
+    }
+  } else {
+    pill.classList.remove('show');
+    const tab = TABS.find(t => t.id === activeTab);
+    if (!tab) return;
+    let html = '';
+    tab.groups.forEach(group => {
+      html += `<div class="group-label">${esc(group.title)}</div>
+        <div class="cards-grid">${group.items.map(item => cardHtml(item, '', false)).join('')}</div>`;
+    });
+    content.innerHTML = html;
+  }
+  attachPreviewListeners();
+}
+
+// ── PREVIEW POPUP ─────────────────────────────────────────────────────────────
+const popup = document.getElementById('previewPopup');
+const popupTitle = document.getElementById('previewTitle');
+const popupFrame = document.getElementById('previewFrame');
+
+function attachPreviewListeners() {
+  document.querySelectorAll('.card').forEach(card => {
+    const label = card.dataset.label;
+    const item = allItems.find(i => i.label === label);
+    if (!item || !item.preview) return;
+
+    const show = () => {
+      clearTimeout(hideTimer);
+      clearTimeout(previewTimer);
+      previewTimer = setTimeout(() => {
+        popupTitle.textContent = '▶ ' + item.label;
+        popupFrame.srcdoc = item.preview;
+        const rect = card.getBoundingClientRect();
+        const W2 = 360, H2 = 265;
+        let left = rect.right + 12;
+        if (left + W2 > window.innerWidth - 10) left = rect.left - W2 - 12;
+        if (left < 8) left = 8;
+        let top = rect.top;
+        if (top + H2 > window.innerHeight - 10) top = window.innerHeight - H2 - 10;
+        if (top < 8) top = 8;
+        popup.style.left = left + 'px';
+        popup.style.top = top + 'px';
+        popup.classList.add('visible');
+      }, 180);
+    };
+
+    const hide = () => {
+      clearTimeout(previewTimer);
+      hideTimer = setTimeout(() => popup.classList.remove('visible'), 120);
+    };
+
+    card.addEventListener('mouseenter', show);
+    card.addEventListener('mouseleave', hide);
+  });
+
+  popup.addEventListener('mouseenter', () => clearTimeout(hideTimer));
+  popup.addEventListener('mouseleave', () => { hideTimer = setTimeout(() => popup.classList.remove('visible'), 120); });
+}
+
+// ── SEARCH ────────────────────────────────────────────────────────────────────
+const searchEl = document.getElementById('search');
+searchEl.addEventListener('input', e => { searchQuery = e.target.value; render(); });
+searchEl.addEventListener('keydown', e => {
+  if (e.key === 'Escape') { searchQuery = ''; e.target.value = ''; render(); }
+});
+
+// ── INIT ──────────────────────────────────────────────────────────────────────
+renderTabsBar();
+render();
+</script>
+</body>
+</html>
